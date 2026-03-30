@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>國小自然：燃燒與生鏽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="burnstyle.css">
+</head>
+
+<body class="font-sans bg-sky-100 min-h-screen select-none">
+
+    <div id="view-menu" class="p-8 max-w-4xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-sky-800 mb-4 drop-shadow-md">國小自然：燃燒與生鏽</h1>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <button onclick="switchView('view-level1')"
+                class="p-6 rounded-2xl border-4 bg-white border-sky-400 text-sky-700 hover:bg-sky-50 hover:scale-105 hover:shadow-xl cursor-pointer transition-all duration-300 flex flex-col items-center text-center">
+                <div class="p-4 rounded-full mb-4 bg-sky-100"><i data-lucide="wind" class="w-8 h-8"></i></div>
+                <h2 class="text-2xl font-bold mb-2">空氣大解密</h2>
+                <p class="text-sm">認識氮氣與氧氣，遇見拉瓦節</p>
+            </button>
+            <button onclick="switchView('view-level2')"
+                class="p-6 rounded-2xl border-4 bg-white border-sky-400 text-sky-700 hover:bg-sky-50 hover:scale-105 hover:shadow-xl cursor-pointer transition-all duration-300 flex flex-col items-center text-center">
+                <div class="p-4 rounded-full mb-4 bg-sky-100"><i data-lucide="beaker" class="w-8 h-8"></i></div>
+                <h2 class="text-2xl font-bold mb-2">氣體實驗室</h2>
+                <p class="text-sm">親手製造氧氣與二氧化碳</p>
+            </button>
+            <button onclick="switchView('view-level3')"
+                class="p-6 rounded-2xl border-4 bg-white border-sky-400 text-sky-700 hover:bg-sky-50 hover:scale-105 hover:shadow-xl cursor-pointer transition-all duration-300 flex flex-col items-center text-center">
+                <div class="p-4 rounded-full mb-4 bg-sky-100"><i data-lucide="flame" class="w-8 h-8"></i></div>
+                <h2 class="text-2xl font-bold mb-2">滅火大師</h2>
+                <p class="text-sm">認識燃燒三要素與滅火訣竅</p>
+            </button>
+            <button onclick="switchView('view-level4')"
+                class="p-6 rounded-2xl border-4 bg-white border-sky-400 text-sky-700 hover:bg-sky-50 hover:scale-105 hover:shadow-xl cursor-pointer transition-all duration-300 flex flex-col items-center text-center">
+                <div class="p-4 rounded-full mb-4 bg-sky-100"><i data-lucide="shield-alert" class="w-8 h-8"></i></div>
+                <h2 class="text-2xl font-bold mb-2">火場逃生</h2>
+                <p class="text-sm">打破迷思，掌握往下往外逃生</p>
+            </button>
+            <button onclick="switchView('view-level5')"
+                class="p-6 rounded-2xl border-4 bg-white border-sky-400 text-sky-700 hover:bg-sky-50 hover:scale-105 hover:shadow-xl cursor-pointer transition-all duration-300 flex flex-col items-center text-center">
+                <div class="p-4 rounded-full mb-4 bg-sky-100"><i data-lucide="shield" class="w-8 h-8"></i></div>
+                <h2 class="text-2xl font-bold mb-2">防鏽兵工廠</h2>
+                <p class="text-sm">隔絕水與空氣，保護鐵製品</p>
+            </button>
+        </div>
+    </div>
+    <div id="view-level1" class="hidden min-h-screen bg-sky-50 p-6 flex flex-col items-center">
+        <div class="w-full max-w-5xl">
+            <button onclick="switchView('view-menu')"
+                class="flex items-center text-sky-600 font-bold mb-6 hover:text-sky-800">
+                <i data-lucide="arrow-left" class="mr-2"></i> 返回地圖
+            </button>
+
+            <header
+                class="flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b-2 border-sky-100 gap-4">
+                <h2 class="text-3xl font-extrabold text-sky-800 drop-shadow-sm">🎈 空氣大解密</h2>
+
+                <div class="flex gap-4">
+                    <button onclick="switchTab('radar')" id="tab-btn-radar"
+                        class="px-6 py-2 rounded-full font-bold bg-sky-500 text-white shadow-md transition-all">空氣的組成</button>
+                    <button onclick="switchTab('lavoisier')" id="tab-btn-lavoisier"
+                        class="px-6 py-2 rounded-full font-bold bg-white text-sky-600 border-2 border-sky-200 hover:bg-sky-50 transition-all">拉瓦節的實驗</button>
+                </div>
+            </header>
+
+            <div id="tab-content-radar">
+                <p class="text-sky-600 font-medium text-center mb-6">點擊左側飄浮的氣體泡泡，收集正確的比例！</p>
+
+                <div class="flex flex-col md:flex-row gap-6 items-stretch">
+
+                    <div class="flex-[2] bg-white rounded-3xl shadow-lg border-4 border-sky-200 p-4 relative overflow-hidden min-h-[500px]"
+                        id="particle-container">
+                        <div class="absolute inset-0 pointer-events-none opacity-30 flex items-center justify-center">
+                            <i data-lucide="wind" class="w-64 h-64 text-sky-300 animate-spin-slow"></i>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex-[1] bg-white rounded-3xl shadow-lg border-4 border-sky-200 p-6 flex flex-col items-center justify-between">
+                        <div class="w-full flex flex-col items-center">
+                            <h3 class="text-xl font-bold text-slate-700 mb-4">大氣成分收集進度</h3>
+
+                            <div class="relative w-48 h-48 mb-6">
+                                <svg viewBox="0 0 32 32"
+                                    class="w-full h-full transform -rotate-90 rounded-full bg-slate-100 shadow-inner">
+                                    <circle id="pie-n2" r="16" cx="16" cy="16"
+                                        class="pie-slice cursor-pointer transition-all duration-500" fill="none"
+                                        stroke="#3b82f6" stroke-width="32" stroke-dasharray="0 100"
+                                        stroke-dashoffset="0" onmouseover="showGasInfo('n2')"
+                                        onmouseout="hideGasInfo()"></circle>
+                                    <circle id="pie-o2" r="16" cx="16" cy="16"
+                                        class="pie-slice cursor-pointer transition-all duration-500" fill="none"
+                                        stroke="#ef4444" stroke-width="32" stroke-dasharray="0 100"
+                                        stroke-dashoffset="0" onmouseover="showGasInfo('o2')"
+                                        onmouseout="hideGasInfo()"></circle>
+                                    <circle id="pie-other" r="16" cx="16" cy="16"
+                                        class="pie-slice cursor-pointer transition-all duration-500" fill="none"
+                                        stroke="#cbd5e1" stroke-width="32" stroke-dasharray="0 100"
+                                        stroke-dashoffset="0" onmouseover="showGasInfo('other')"
+                                        onmouseout="hideGasInfo()"></circle>
+                                </svg>
+                                <div
+                                    class="absolute inset-0 m-auto w-24 h-24 bg-white rounded-full flex flex-col items-center justify-center shadow-sm pointer-events-none">
+                                    <span id="total-progress" class="text-2xl font-black text-sky-600">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="w-full text-sm font-bold text-slate-600 mb-6 space-y-2">
+                                <div class="flex justify-between items-center"><span class="text-blue-500">🔵
+                                        氮氣(N₂)</span> <span id="count-n2">0 / 7</span></div>
+                                <div class="flex justify-between items-center"><span class="text-red-500">🔴
+                                        氧氣(O₂)</span> <span id="count-o2">0 / 2</span></div>
+                                <div class="flex justify-between items-center"><span class="text-slate-400">⚪
+                                        其他(Mix)</span> <span id="count-other">0 / 1</span></div>
+                            </div>
+                        </div>
+
+                        <div id="gas-info-box"
+                            class="w-full bg-sky-50 border-2 border-sky-200 rounded-xl p-4 min-h-[120px] flex items-center justify-center transition-opacity duration-300 opacity-50">
+                            <p class="text-slate-500 text-center text-sm">滑鼠移到圓餅圖的顏色區塊上，查看氣體小秘密！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-content-lavoisier" class="hidden w-full flex flex-col items-center">
+
+                <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6 mb-8">
+
+                    <div id="lavoisier-simulation-area"
+                        class="w-full min-h-[500px] rounded-2xl overflow-hidden shadow-sm border-4 border-slate-200 relative bg-white">
+                        <div id="lavoisier-bg" class="absolute inset-0"
+                            style="background-image: url('曲頸瓶.png'); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                        </div>
+
+                    </div>
+
+                    <div id="lavoisier-control-panel" class="w-full relative min-h-[400px]">
+
+                        <div id="panel-prepare"
+                            class="bg-white p-6 rounded-xl shadow-sm border-2 border-slate-200 w-full">
+                            <h3 class="text-xl font-bold text-slate-800 mb-5 flex items-center">
+                                <i data-lucide="package-plus" class="w-6 h-6 text-sky-500 mr-2"></i>
+                                第一階段：預備實驗物品
+                            </h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <button id="place-mercury-btn"
+                                    class="flex flex-col items-center justify-center gap-2 p-4 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 font-bold border border-slate-300 transition-colors"
+                                    onclick="placeItem('mercury')">
+                                    <i data-lucide="droplets" class="w-8 h-8 text-blue-500"></i>
+                                    水銀 (汞密封)
+                                </button>
+                                <button id="place-fire-btn"
+                                    class="flex flex-col items-center justify-center gap-2 p-4 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 font-bold border border-slate-300 transition-colors"
+                                    onclick="placeItem('fire')">
+                                    <i data-lucide="flame" class="w-8 h-8 text-red-500"></i>
+                                    爐火 (放置在爐灶)
+                                </button>
+                                <button id="place-charcoal-btn"
+                                    class="flex flex-col items-center justify-center gap-2 p-4 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 font-bold border border-slate-300 transition-colors"
+                                    onclick="placeItem('charcoal')">
+                                    <i data-lucide="box" class="w-8 h-8 text-slate-700"></i>
+                                    木炭 (維持火力)
+                                </button>
+                                <button id="reset-placement-btn"
+                                    class="flex flex-col items-center justify-center gap-2 p-4 bg-red-50 hover:bg-red-100 rounded-lg text-red-700 font-bold border border-red-200 transition-colors"
+                                    onclick="resetPlacement()">
+                                    <i data-lucide="rotate-ccw" class="w-8 h-8 text-red-500"></i>
+                                    重設物品
+                                </button>
+                            </div>
+                            <p id="prepare-hint" class="text-sm text-slate-500 mt-4 text-center">💡
+                                請先將所有實驗物品點選放置到圖上相對位置。</p>
+
+                            <button id="start-seal-btn"
+                                class="hidden w-full mt-6 p-4 bg-sky-600 hover:bg-sky-700 rounded-lg text-white font-black text-xl flex items-center justify-center gap-2 shadow-md transition-all hover:scale-[1.02]"
+                                onclick="startSetupSeal()">
+                                <i data-lucide="lock" class="w-6 h-6"></i>
+                                開始裝置密封
+                            </button>
+                        </div>
+
+                        <div id="panel-heating"
+                            class="hidden bg-white p-6 rounded-xl shadow-sm border-2 border-slate-200 w-full flex-col">
+                            <h3 class="text-xl font-bold text-slate-800 mb-5 flex items-center">
+                                <i data-lucide="flame-kindling" class="w-6 h-6 text-orange-500 mr-2"></i>
+                                第一階段：消耗氧氣 (加熱)
+                            </h3>
+
+                            <label for="lav-slider" class="block text-center font-bold text-slate-700 mb-4 text-lg">
+                                持續加熱天數：<br><span id="lav-day-display" class="text-sky-600 text-4xl font-black">0</span>
+                                天
+                            </label>
+                            <input type="range" id="lav-slider" min="0" max="12" value="0" step="1"
+                                class="w-full h-4 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                                oninput="updateLavoisierExperiment(this.value)">
+                            <div class="flex justify-between text-sm text-slate-400 mt-2 font-bold px-1 mb-6">
+                                <span>Day 0</span>
+                                <span>Day 12</span>
+                            </div>
+
+                            <div id="lavoisier-dynamic-status"
+                                class="bg-sky-50 p-6 rounded-xl border border-sky-200 text-center flex-1 flex flex-col justify-center">
+                                <h3 id="lav-title" class="text-xl font-bold text-slate-700 mb-3">裝置密封完成 (Day 0)</h3>
+                                <p id="lav-desc" class="text-base text-slate-600 font-medium leading-relaxed">
+                                    「裝置已密封。目前曲頸瓶內有空氣與水銀，請拉動滑桿開始持續加熱 12 天。」</p>
+                            </div>
+                        </div>
+
+                        <div id="panel-stage2"
+                            class="hidden bg-white p-6 rounded-xl shadow-sm border-2 border-slate-200 w-full flex-col items-center justify-center text-center h-full min-h-[350px]">
+                            <div
+                                class="w-20 h-20 bg-sky-100 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                                <i data-lucide="flask-conical" class="w-10 h-10 text-sky-600"></i>
+                            </div>
+                            <h3 class="text-2xl font-extrabold text-slate-800 mb-4">第二階段：回收氧氣</h3>
+                            <p class="text-slate-600 font-medium leading-relaxed text-lg mb-6 text-left">
+                                這裡將是第二階段「分解反應」的操作面板。<br>
+                                您可以在這裡引導學生：<br>
+                                1. 收集紅色粉末<br>
+                                2. 用更高的溫度強烈加熱<br>
+                                3. 驗證產生的氣體（氧氣）
+                            </p>
+                            <button onclick="resetPlacement()"
+                                class="mt-2 px-6 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition-colors font-bold">
+                                重新開始整個實驗
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="stage2-modal"
+                    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm">
+                    <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-md w-full mx-4 animate-fade-in-up">
+                        <div
+                            class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+                            <i data-lucide="flask-conical" class="w-10 h-10 text-green-500"></i>
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-slate-800 mb-4 text-center">實驗完成！拉瓦節的發現</h3>
+
+                        <div class="text-slate-600 mb-6 text-left text-base leading-relaxed space-y-3">
+                            <p>拉瓦節透過這個 12 天的密閉加熱實驗，成功證明了空氣不是單一物質！</p>
+                            <ul class="list-disc list-inside space-y-1 ml-1 font-medium text-slate-700">
+                                <li>消失的 <strong class="text-red-500 text-lg">1/5</strong> 氣體具助燃性，命名為<strong>氧氣</strong>。
+                                </li>
+                                <li>剩下的 <strong class="text-blue-600 text-lg">4/5</strong> 氣體不助燃，稱為<strong>氮氣</strong>。
+                                </li>
+                            </ul>
+
+                            <div class="bg-red-50 p-4 rounded-xl border border-red-200 mt-5">
+                                <p class="text-base font-bold text-red-800 mb-2 flex items-center">
+                                    <i data-lucide="flame" class="w-5 h-5 mr-1"></i> 紅色粉末的秘密
+                                </p>
+                                <p class="text-sm text-slate-700 font-medium leading-relaxed">
+                                    那些在曲頸瓶裡生成的<strong
+                                        class="text-red-600">紅色粉末（氧化汞）</strong>，其實就是水銀和氧氣結合的產物。如果我們將它收集起來，用更高的溫度「強烈加熱」，它就會發生分解反應，把剛剛吃進去的「氧氣」重新釋放出來喔！
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center mt-2">
+                            <button onclick="closeStage2Modal()"
+                                class="px-8 py-3 rounded-xl font-bold text-white bg-sky-600 hover:bg-sky-700 hover:scale-105 active:scale-95 transition-all shadow-md w-full text-lg">
+                                太棒了！我懂了
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="w-full max-w-5xl bg-white p-8 md:p-10 rounded-3xl border-4 border-sky-100 shadow-sm mb-10 text-left">
+
+                    <h3 class="flex items-center text-2xl font-extrabold text-slate-800 mb-6">
+                        <i data-lucide="beaker" class="w-7 h-7 text-sky-500 mr-3"></i>
+                        拉瓦節的鐘罩實驗
+                    </h3>
+                    <div class="text-lg text-slate-600 font-medium leading-normal">
+                        <p>十八世紀時，法國科學家 <strong class="text-sky-700 text-xl">拉瓦節</strong> 進行了一個著名的實驗。
+                            他將水銀放在密閉容器中加熱，發現有一部分的空氣與水銀結合，變成了紅色的粉末（氧化汞）。他測量後發現，這部分消失的空氣大約佔了整體空氣的
+                            <strong class="text-red-500 text-xl mx-1">五分之一</strong>，且剩下的空氣無法讓蠟燭燃燒，也無法讓小動物生存。
+                        </p>
+                    </div>
+
+                    <div class="bg-sky-50/70 p-6 md:p-8 rounded-2xl border-l-[10px] border-sky-400 mt-8">
+                        <p class="flex items-center text-xl font-bold text-slate-800 mb-4">
+                            <span class="text-2xl mr-2">💡</span> 實驗結論：
+                        </p>
+                        <p class="text-lg text-slate-700 font-medium leading-normal mb-4">
+                            他將這佔據 1/5 且幫助燃燒的氣體命名為<strong class="text-red-500 text-xl mx-1">「氧氣」</strong>，而剩下佔據 4/5
+                            不助燃的氣體稱為<strong class="text-blue-600 text-xl mx-1">「氮氣」</strong>。
+                        </p>
+                        <p class="text-slate-500 mt-4 font-normal text-base">
+                            這個實驗成功推翻了當時錯誤的「燃素說」，拉瓦節也被尊稱為現代化學之父！
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="win-modal"
+        class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300">
+        <div
+            class="bg-white rounded-3xl p-10 max-w-md w-full text-center shadow-2xl border-4 border-sky-300 animate-fade-in-up">
+            <div class="text-6xl mb-4">🎉</div>
+            <h3 class="text-3xl font-extrabold text-sky-800 mb-4">大解密成功！</h3>
+            <p class="text-lg text-slate-700 font-medium mb-8 leading-relaxed">
+                恭喜你成功調配出地球的大氣比例！<br><br>
+                <span class="text-blue-600 font-black text-xl">78% 氮氣</span><br>
+                <span class="text-red-500 font-black text-xl">21% 氧氣</span><br>
+                <span class="text-slate-500 font-black text-xl">1% 其他氣體</span>
+            </p>
+            <button onclick="closeWinModal()"
+                class="px-8 py-3 bg-sky-500 text-white font-bold text-lg rounded-full hover:bg-sky-600 hover:scale-105 active:scale-95 transition-all shadow-md w-full">太棒了！</button></button>
+        </div>
+    </div>
+
+    <div id="view-level2" class="hidden min-h-screen bg-slate-50 p-6 flex flex-col items-center">
+        <div class="w-full max-w-4xl">
+            <button onclick="switchView('view-menu')"
+                class="flex items-center text-sky-600 font-bold mb-6 hover:text-sky-800">
+                <i data-lucide="arrow-left" class="mr-2"></i> 返回地圖
+            </button>
+
+            <header
+                class="flex flex-col md:flex-row justify-between items-center mb-8 border-b-4 border-indigo-100 pb-4 gap-4">
+                <h2 class="text-3xl font-extrabold text-indigo-800">🧪 氣體實驗室</h2>
+
+                <div
+                    class="bg-sky-100 px-5 py-2 rounded-full border-2 border-sky-200 text-sky-800 font-bold shadow-sm flex items-center">
+                    <span class="mr-2">🔍 氧氣配方探索進度：</span>
+                    <span id="o2-progress" class="text-2xl font-black text-blue-600">0</span>
+                    <span class="mx-1">/</span> 4 組
+                </div>
+            </header>
+
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="flex-1 bg-indigo-50 p-6 rounded-2xl border-2 border-indigo-100">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">1. 選擇要加入廣口瓶的材料 (最多兩種)</h3>
+                    <div id="ingredients-grid" class="grid grid-cols-2 md:grid-cols-5 gap-3">
+
+                        <button id="btn-h2o2" onclick="addIngredient('h2o2', '💧 雙氧水')"
+                            class="p-3 rounded-xl border-2 border-blue-300 bg-blue-50 font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">💧</span>雙氧水
+                        </button>
+                        <button id="btn-mushroom" onclick="addIngredient('mushroom', '🍄 金針菇')"
+                            class="p-3 rounded-xl border-2 border-blue-300 bg-blue-50 font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">🍄</span>金針菇
+                        </button>
+                        <button id="btn-liver" onclick="addIngredient('liver', '🥩 豬肝塊')"
+                            class="p-3 rounded-xl border-2 border-blue-300 bg-blue-50 font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">🥩</span>豬肝塊
+                        </button>
+                        <button id="btn-carrot" onclick="addIngredient('carrot', '🥕 紅蘿蔔丁')"
+                            class="p-3 rounded-xl border-2 border-blue-300 bg-blue-50 font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">🥕</span>紅蘿蔔丁
+                        </button>
+
+                        <button id="btn-bleach" onclick="addIngredient('bleach', '🫧 活氧漂白粉')"
+                            class="p-3 rounded-xl border-2 border-emerald-300 bg-emerald-50 font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">🫧</span>活氧漂白粉
+                        </button>
+                        <button id="btn-warmwater" onclick="addIngredient('warmwater', '♨️ 溫水')"
+                            class="p-3 rounded-xl border-2 border-emerald-300 bg-emerald-50 font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">♨️</span>溫水
+                        </button>
+
+                        <button id="btn-vinegar" onclick="addIngredient('vinegar', '🍾 食醋')"
+                            class="p-3 rounded-xl border-2 border-slate-300 bg-white font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">🍾</span>食醋
+                        </button>
+                        <button id="btn-citric" onclick="addIngredient('citric', '🍋 檸檬酸水')"
+                            class="p-3 rounded-xl border-2 border-slate-300 bg-white font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">🍋</span>檸檬酸水
+                        </button>
+                        <button id="btn-bakingSoda" onclick="addIngredient('bakingSoda', '🧂 小蘇打粉')"
+                            class="p-3 rounded-xl border-2 border-slate-300 bg-white font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">🧂</span>小蘇打粉
+                        </button>
+                        <button id="btn-eggshell" onclick="addIngredient('eggshell', '🥚 碎蛋殼')"
+                            class="p-3 rounded-xl border-2 border-slate-300 bg-white font-bold text-slate-700 shadow-sm hover:scale-105 active:scale-95 transition-transform flex flex-col items-center justify-center text-sm">
+                            <span class="text-2xl mb-1">🥚</span>碎蛋殼
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    class="flex-1 flex flex-col items-center justify-center gap-5 p-6 bg-blue-50 rounded-2xl border-2 border-blue-100 relative overflow-hidden">
+                    <div id="incense-container"
+                        class="hidden absolute top-0 left-1/2 -translate-x-1/2 z-30 flex-col items-center pointer-events-none mt-10">
+                        <div class="w-2 h-32 bg-amber-900 rounded-full shadow-inner"></div>
+
+                        <div id="incense-flame" class="text-4xl mt-[-8px] z-10 transition-all">🔥</div>
+                    </div>
+                    <div id="limewater-container"
+                        class="hidden absolute top-4 right-1/4 z-30 flex-col items-center pointer-events-none">
+                        <div
+                            class="w-6 h-20 border-2 border-slate-300 rounded-b-full bg-cyan-50/30 relative overflow-hidden flex items-end shadow-sm">
+                            <div id="limewater-liquid" class="w-full h-1/2 bg-cyan-100/50 transition-all duration-1000">
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-slate-500 mt-1 bg-white/80 px-1 rounded">石灰水</div>
+                    </div>
+                    <div id="gas-animation"
+                        class="hidden absolute inset-0 pointer-events-none flex justify-center items-center pb-32 opacity-80 z-20">
+                        <div class="animate-float-up text-4xl gas-icon"></div>
+                        <div class="animate-float-up text-3xl ml-16 mb-8 gas-icon" style="animation-delay: 0.6s;"></div>
+                        <div class="animate-float-up text-5xl mr-16 mt-8 gas-icon" style="animation-delay: 1.2s;"></div>
+                    </div>
+
+                    <div id="gas-result" class="text-center z-10 min-h-[60px] flex items-end justify-center"></div>
+
+                    <div
+                        class="w-32 h-40 border-4 border-slate-400 rounded-b-3xl rounded-t-lg relative bg-sky-100/50 backdrop-blur-sm flex items-end justify-center pb-1 z-10 shadow-inner">
+
+                        <div id="jar-fog"
+                            class="hidden absolute inset-0 bg-white opacity-0 rounded-b-3xl rounded-t-lg transition-opacity duration-1000 z-0">
+                        </div>
+
+                        <div id="beaker-display" class="text-center font-bold text-slate-800 text-sm z-20 relative">空廣口瓶
+                        </div>
+                    </div>
+                    <button onclick="clearBeaker()"
+                        class="mt-auto w-full py-3 bg-white border-2 border-red-200 text-red-600 font-bold rounded-xl hover:bg-red-50 hover:border-red-300 shadow-sm transition-all z-10 active:scale-95">
+                        🗑️ 清空廣口瓶重新實驗
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-green-50 p-6 rounded-2xl border-2 border-green-100">
+                <h3 class="text-xl font-bold text-green-700 mb-4">2. 選擇檢驗工具來測試收集到的氣體</h3>
+                <div class="flex gap-4 mb-4">
+                    <button onclick="runTest('incense')"
+                        class="flex-1 bg-orange-100 hover:bg-orange-200 border-2 border-orange-300 text-orange-800 font-bold py-3 rounded-xl transition-colors shadow-sm">
+                        🧨 放入點燃的線香
+                    </button>
+                    <button onclick="runTest('limewater')"
+                        class="flex-1 bg-cyan-100 hover:bg-cyan-200 border-2 border-cyan-300 text-cyan-800 font-bold py-3 rounded-xl transition-colors shadow-sm">
+                        🧪 倒入澄清石灰水搖晃
+                    </button>
+                </div>
+
+                <div id="test-result-box"
+                    class="hidden bg-white p-4 rounded-xl border-l-4 border-green-500 shadow text-lg font-medium text-slate-700 animate-fade-in-up">
+                    講解：<span id="test-result-text"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div id="view-level3" class="hidden min-h-screen bg-orange-50 p-6 flex flex-col items-center">
+        <div class="w-full max-w-5xl">
+            <button onclick="switchView('view-menu')"
+                class="flex items-center text-orange-600 font-bold mb-6 hover:text-orange-800">
+                <i data-lucide="arrow-left" class="mr-2"></i> 返回地圖
+            </button>
+
+            <header
+                class="flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b-4 border-orange-200 gap-4">
+                <h2 class="text-3xl font-extrabold text-red-700 drop-shadow-sm">🧑‍🚒 滅火大師</h2>
+
+                <div class="flex gap-4">
+                    <button onclick="switchFireTab('elements')" id="tab-btn-elements"
+                        class="px-6 py-2 rounded-full font-bold bg-orange-500 text-white shadow-md transition-all">燃燒三要素</button>
+                    <button onclick="switchFireTab('game')" id="tab-btn-game"
+                        class="px-6 py-2 rounded-full font-bold bg-white text-orange-600 border-2 border-orange-200 hover:bg-orange-50 transition-all">情境演練</button>
+                </div>
+            </header>
+
+            <div id="tab-content-elements" class="w-full animate-fade-in-up">
+
+                <div class="bg-white rounded-3xl shadow-lg border-4 border-red-100 p-8 mb-8 relative overflow-hidden">
+                    <i data-lucide="triangle"
+                        class="absolute -right-10 -bottom-10 w-64 h-64 text-red-50 opacity-50 rotate-12 pointer-events-none"></i>
+
+                    <h3 class="text-2xl font-extrabold text-red-700 mb-2 flex items-center relative z-10">
+                        <i data-lucide="flame" class="w-8 h-8 mr-2 text-red-500"></i> 燃燒的「火之金三角」
+                    </h3>
+                    <p class="text-slate-600 font-medium mb-6 text-lg relative z-10">
+                        燃燒是一種劇烈的氧化反應。要讓火燒起來，必須<strong class="text-red-600 mx-1">同時具備</strong>以下三個條件，缺一不可！
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                        <div
+                            class="bg-orange-50 p-6 rounded-2xl border-2 border-orange-200 hover:shadow-md transition-shadow">
+                            <div class="text-5xl mb-4 drop-shadow-sm">🪵</div>
+                            <h4 class="text-xl font-bold text-orange-800 mb-3 border-b-2 border-orange-200 pb-2">1. 可燃物
+                                (燃料)</h4>
+                            <p class="text-slate-700 font-medium mb-3">可以發生燃燒反應的物質。</p>
+                            <ul class="text-sm text-slate-600 space-y-1 mb-4">
+                                <li><span class="font-bold text-orange-700">固態：</span>木材、紙張、塑膠</li>
+                                <li><span class="font-bold text-orange-700">液態：</span>酒精、汽油、沙拉油</li>
+                                <li><span class="font-bold text-orange-700">氣態：</span>天然氣、瓦斯</li>
+                            </ul>
+                            <div class="bg-white p-3 rounded-xl text-sm border border-orange-100 shadow-inner">
+                                <span class="font-bold text-orange-600">🤔 思考一下：</span>石頭、玻璃、水可以燃燒嗎？它們屬於「不可燃物」喔！
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200 hover:shadow-md transition-shadow">
+                            <div class="text-5xl mb-4 drop-shadow-sm">💨</div>
+                            <h4 class="text-xl font-bold text-blue-800 mb-3 border-b-2 border-blue-200 pb-2">2. 助燃物 (氧氣)
+                            </h4>
+                            <p class="text-slate-700 font-medium mb-3">燃燒的幕後推手！它自己不會燒起來，但能幫助別人燒得更旺。</p>
+                            <div class="bg-white p-3 rounded-xl text-sm border border-blue-100 shadow-inner mt-auto">
+                                <span class="font-bold text-blue-600">💡 連結記憶：</span>還記得第一關嗎？空氣中約有 <strong
+                                    class="text-red-500">21%</strong> 的氧氣。當密閉空間內的氧氣被消耗殆盡，火就會自動熄滅！
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-red-50 p-6 rounded-2xl border-2 border-red-200 hover:shadow-md transition-shadow">
+                            <div class="text-5xl mb-4 drop-shadow-sm">🌡️</div>
+                            <h4 class="text-xl font-bold text-red-800 mb-3 border-b-2 border-red-200 pb-2">3. 達到燃點 (熱能)
+                            </h4>
+                            <p class="text-slate-700 font-medium mb-3">物質開始燃燒所需的<strong
+                                    class="text-red-600">最低溫度</strong>。</p>
+                            <ul class="text-sm text-slate-600 space-y-1 mb-4">
+                                <li>🔥 <span class="font-bold">白磷：</span>約 34°C (極易自燃)</li>
+                                <li>📄 <span class="font-bold">紙張：</span>約 230°C</li>
+                                <li>🪵 <span class="font-bold">木炭：</span>約 350°C</li>
+                            </ul>
+                            <div class="bg-white p-3 rounded-xl text-sm border border-red-100 shadow-inner">
+                                <span class="font-bold text-red-600">🔥 生活應用：</span>火柴輕輕一劃就著火，是因為「摩擦生熱」讓溫度達到了火柴頭的燃點！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-lg border-4 border-sky-100 p-8">
+                    <h3 class="text-2xl font-extrabold text-sky-700 mb-2 flex items-center">
+                        <i data-lucide="shield-check" class="w-8 h-8 mr-2 text-sky-500"></i> 打破金三角：滅火原理
+                    </h3>
+                    <p class="text-slate-600 font-medium mb-6 text-lg">
+                        既然燃燒需要三個條件同時存在，我們只要<strong class="text-sky-600 mx-1">移除其中任何一個要素</strong>，火就會立刻熄滅！這是滅火的基本原理。
+                    </p>
+
+                    <div class="space-y-4">
+                        <div
+                            class="flex flex-col md:flex-row items-start bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-300 transition-colors">
+                            <div class="bg-white p-3 rounded-full shadow-sm mr-4 mb-3 md:mb-0 shrink-0">
+                                <span class="text-3xl block">🛑</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-slate-800 mb-1 flex items-center">
+                                    移除可燃物 <span
+                                        class="ml-3 text-sm font-normal bg-slate-200 text-slate-600 px-3 py-1 rounded-full">釜底抽薪</span>
+                                </h4>
+                                <p class="text-slate-600">把還沒燒到的燃料搬走，或是切斷燃料供應。火沒有東西可以吃，就會餓死。</p>
+                                <p class="text-sm text-slate-500 mt-2 font-bold">👉
+                                    常見做法：關閉瓦斯爐開關、森林大火砍伐樹木開闢防火巷、建築物預留防火空間。</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex flex-col md:flex-row items-start bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-300 transition-colors">
+                            <div class="bg-white p-3 rounded-full shadow-sm mr-4 mb-3 md:mb-0 shrink-0">
+                                <span class="text-3xl block">🟫</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-slate-800 mb-1 flex items-center">
+                                    隔絕助燃物 (氧氣) <span
+                                        class="ml-3 text-sm font-normal bg-slate-200 text-slate-600 px-3 py-1 rounded-full">窒息法</span>
+                                </h4>
+                                <p class="text-slate-600">用不透氣的物質蓋住火源，不讓新鮮的空氣跑進去。火沒有氧氣呼吸，就會悶死。</p>
+                                <p class="text-sm text-slate-500 mt-2 font-bold">👉
+                                    常見做法：以廣口瓶蓋住蠟燭、油鍋起火蓋上鍋蓋、身上起火時在地上打滾壓熄火焰。</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex flex-col md:flex-row items-start bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-300 transition-colors">
+                            <div class="bg-white p-3 rounded-full shadow-sm mr-4 mb-3 md:mb-0 shrink-0">
+                                <span class="text-3xl block">🪣</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-slate-800 mb-1 flex items-center">
+                                    降低溫度達不到燃點 <span
+                                        class="ml-3 text-sm font-normal bg-slate-200 text-slate-600 px-3 py-1 rounded-full">冷卻法</span>
+                                </h4>
+                                <p class="text-slate-600">利用大量的水或其他冷卻劑吸收熱量，讓可燃物的溫度降到燃點以下。</p>
+                                <p class="text-sm text-slate-500 mt-2 font-bold">👉 常見做法：燃燒的線香泡水、消防員用水柱灌救、用水澆熄烤肉完的木炭。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-content-game" class="hidden w-full">
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                    <div class="flex justify-between items-center mb-6 bg-slate-100 p-4 rounded-2xl">
+                        <div class="text-lg font-bold text-slate-700">挑戰進度：<span id="game-round-text"
+                                class="text-orange-600 text-2xl font-black mx-2">1</span> / 5</div>
+                        <div class="flex gap-2" id="game-progress-dots">
+                        </div>
+                    </div>
+
+                    <div id="fire-display"
+                        class="p-12 rounded-3xl text-center mb-8 transition-colors duration-500 bg-red-100 border-4 border-red-500">
+                        <div id="fire-icon" class="text-8xl mb-4 animate-pulse">🍳🔥</div>
+                        <h3 id="fire-title" class="text-3xl font-bold text-slate-800">載入中...</h3>
+                    </div>
+
+                    <div id="tools-section">
+                        <h3 class="text-xl font-bold text-center text-slate-700 mb-4">快選擇正確的滅火方式！</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <button onclick="handleExtinguish('water')"
+                                class="p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-sky-50 hover:border-sky-500 hover:shadow-lg transition-all flex flex-col items-center">
+                                <span class="text-4xl mb-2">🪣💦</span><span class="font-bold text-lg">灑水降溫</span>
+                            </button>
+                            <button onclick="handleExtinguish('starve')"
+                                class="p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-orange-50 hover:border-orange-500 hover:shadow-lg transition-all flex flex-col items-center">
+                                <span class="text-4xl mb-2">🛑🚫</span><span class="font-bold text-lg">移除可燃物</span>
+                            </button>
+                            <button onclick="handleExtinguish('smother')"
+                                class="p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-slate-100 hover:border-slate-500 hover:shadow-lg transition-all flex flex-col items-center">
+                                <span class="text-4xl mb-2">🟫🥘</span><span class="font-bold text-lg">隔絕氧氣</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="feedback-box" class="hidden mt-8 p-6 rounded-2xl border-2 flex items-start gap-4">
+                        <div id="feedback-icon" class="mt-1 flex-shrink-0"></div>
+                        <div class="w-full">
+                            <p id="feedback-text" class="text-xl font-bold mb-2"></p>
+                            <p id="feedback-detail" class="text-slate-600 font-medium text-lg leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <div id="next-round-section" class="hidden text-center mt-6">
+                        <button id="next-btn" onclick="nextFireRound()"
+                            class="px-8 py-3 bg-orange-500 text-white font-black text-lg rounded-full hover:bg-orange-600 hover:scale-105 transition-all shadow-md">
+                            前往下一個情境 ➡️
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="view-level4" class="hidden min-h-screen bg-slate-50 p-6 flex flex-col items-center">
+        <div class="w-full max-w-5xl">
+            <button onclick="switchView('view-menu')"
+                class="flex items-center text-slate-600 font-bold mb-6 hover:text-slate-800">
+                <i data-lucide="arrow-left" class="mr-2"></i> 返回地圖
+            </button>
+
+            <header
+                class="flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b-4 border-slate-200 gap-4">
+                <h2 class="text-3xl font-extrabold text-slate-800 drop-shadow-sm">🏃‍♂️ 火場逃生</h2>
+
+                <div class="flex gap-2 md:gap-4 flex-wrap justify-end">
+                    <button onclick="switchEscapeTab('info')" id="tab-btn-escape-info"
+                        class="px-5 py-2 rounded-full font-bold bg-slate-600 text-white shadow-md transition-all text-sm md:text-base">
+                        逃生守則</button>
+                    <button onclick="switchEscapeTab('ox')" id="tab-btn-escape-ox"
+                        class="tab-locked px-5 py-2 rounded-full font-bold bg-white text-slate-400 border-2 border-slate-200 transition-all cursor-not-allowed text-sm md:text-base">
+                        <i data-lucide="lock" class="w-4 h-4 inline-block mr-1"></i> 是非考驗
+                    </button>
+                    <button onclick="switchEscapeTab('game')" id="tab-btn-escape-game"
+                        class="tab-locked px-5 py-2 rounded-full font-bold bg-white text-slate-400 border-2 border-slate-200 transition-all cursor-not-allowed text-sm md:text-base">
+                        <i data-lucide="lock" class="w-4 h-4 inline-block mr-1"></i> 實戰演練
+                    </button>
+                </div>
+            </header>
+
+            <div id="tab-content-escape-info" class="w-full animate-fade-in-up">
+
+                <div class="bg-white rounded-3xl shadow-lg border-4 border-red-100 p-8 mb-8">
+                    <div class="flex justify-between items-start mb-6 gap-4">
+                        <h3 class="text-2xl font-extrabold text-red-700 flex items-center">
+                            <i data-lucide="extinguisher" class="w-8 h-8 mr-2 text-red-500"></i> 滅火器操作口訣 (PASS)
+                        </h3>
+                        <div id="sort-status-box"
+                            class="flex items-center gap-2 bg-slate-100 p-3 rounded-xl border border-slate-200 shadow-inner">
+                            <span class="text-3xl">🧩</span>
+                            <div>
+                                <p class="font-bold text-slate-700">任務：請依序拖曳卡片</p>
+                                <p id="sort-msg" class="text-sm text-red-600 font-medium">先完成正確排序，才能解鎖遊戲喔！</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="extinguisher-sortable-container" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+                        <div draggable="true" data-step="sweep"
+                            class="ext-card sortable-item bg-red-50 p-4 rounded-2xl border-2 border-red-200 text-center flex flex-col items-center shadow-md cursor-grab active:cursor-grabbing hover:border-red-400 transition-all relative group">
+                            <div
+                                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/70 rounded-full p-1">
+                                <i data-lucide="grip-vertical" class="w-5 h-5 text-red-400"></i>
+                            </div>
+                            <div class="text-4xl mb-2 font-black text-red-400">掃</div>
+                            <p class="text-slate-700 font-bold">左右掃射撲滅</p>
+                        </div>
+
+                        <div draggable="true" data-step="squeeze"
+                            class="ext-card sortable-item bg-red-100 p-4 rounded-2xl border-2 border-red-300 text-center flex flex-col items-center shadow-md cursor-grab active:cursor-grabbing hover:border-red-400 transition-all relative group">
+                            <div
+                                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/70 rounded-full p-1">
+                                <i data-lucide="grip-vertical" class="w-5 h-5 text-red-300"></i>
+                            </div>
+                            <div class="text-4xl mb-2 font-black text-red-500">壓</div>
+                            <p class="text-slate-700 font-bold">用力壓下把手</p>
+                        </div>
+
+                        <div draggable="true" data-step="pull"
+                            class="ext-card sortable-item bg-red-800 p-4 rounded-2xl border-2 border-red-900 text-center flex flex-col items-center shadow-md cursor-grab active:cursor-grabbing hover:border-red-400 transition-all relative group">
+                            <div
+                                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/70 rounded-full p-1">
+                                <i data-lucide="grip-vertical" class="w-5 h-5 text-red-400"></i>
+                            </div>
+                            <div class="text-4xl mb-2 font-black text-white">拉</div>
+                            <p class="text-red-100 font-bold">拔出安全插銷</p>
+                        </div>
+
+                        <div draggable="true" data-step="aim"
+                            class="ext-card sortable-item bg-red-600 p-4 rounded-2xl border-2 border-red-700 text-center flex flex-col items-center shadow-md cursor-grab active:cursor-grabbing hover:border-red-400 transition-all relative group">
+                            <div
+                                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/70 rounded-full p-1">
+                                <i data-lucide="grip-vertical" class="w-5 h-5 text-red-200"></i>
+                            </div>
+                            <div class="text-4xl mb-2 font-black text-white">瞄</div>
+                            <p class="text-red-50 font-bold">瞄準火源<strong class="text-yellow-300 mx-1">底部</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-lg border-4 border-slate-200 p-8 mb-8">
+                    <h3 class="text-2xl font-extrabold text-slate-800 mb-6 flex items-center">
+                        <i data-lucide="shield-alert" class="w-8 h-8 mr-2 text-slate-600"></i> 破解！逃生三大致命迷思
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-200 relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-7xl opacity-10">❌</div>
+                            <h4
+                                class="text-xl font-bold text-slate-800 mb-2 border-b-2 border-red-300 pb-2 inline-block">
+                                躲在浴室</h4>
+                            <p class="text-slate-600 font-medium mt-2">浴室塑膠門遇熱會熔化，且排水孔有水封，<strong
+                                    class="text-red-600">沒有新鮮空氣</strong>，反而會困住自己。</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-200 relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-7xl opacity-10">❌</div>
+                            <h4
+                                class="text-xl font-bold text-slate-800 mb-2 border-b-2 border-red-300 pb-2 inline-block">
+                                往樓上跑</h4>
+                            <p class="text-slate-600 font-medium mt-2">煙霧每秒上升 3~5 公尺，<strong
+                                    class="text-red-600">人跑不贏煙霧</strong>！火災時絕對不能往上跑，更不能搭電梯。</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-200 relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-7xl opacity-10">❌</div>
+                            <h4
+                                class="text-xl font-bold text-slate-800 mb-2 border-b-2 border-red-300 pb-2 inline-block">
+                                找濕毛巾摀口鼻</h4>
+                            <p class="text-slate-600 font-medium mt-2">現代火災多為劇毒濃煙，濕毛巾<strong
+                                    class="text-red-600">擋不住毒氣</strong>，且尋找毛巾會延誤寶貴的逃生黃金時間。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-emerald-50 rounded-3xl shadow-lg border-4 border-emerald-200 p-8 text-center relative overflow-hidden">
+                    <i data-lucide="check-circle"
+                        class="absolute -left-10 -bottom-10 w-64 h-64 text-emerald-100 opacity-50 rotate-12 pointer-events-none"></i>
+                    <div class="text-5xl mb-4 relative z-10">✅</div>
+                    <h3 class="text-2xl font-extrabold text-emerald-800 mb-4 relative z-10">終極鐵則：小火快逃，濃煙關門！</h3>
+                    <p class="text-lg text-emerald-700 font-bold relative z-10 leading-relaxed">
+                        門外沒有濃煙 👉 <strong
+                            class="bg-white px-3 py-1 rounded-full text-emerald-600 shadow-sm">往下、往外</strong>逃生。<br><br>
+                        門外都是濃煙 👉 立刻退回房間，<strong
+                            class="bg-white px-3 py-1 rounded-full text-red-600 shadow-sm border border-red-200">關上房門</strong>，用衣物塞住門縫，到窗邊求救！
+                    </p>
+                </div>
+            </div>
+            <div id="tab-content-escape-ox" class="hidden w-full">
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                    <div
+                        class="flex justify-between items-center mb-6 bg-slate-100 p-4 rounded-2xl border border-slate-200">
+                        <div class="text-lg font-bold text-slate-700">觀念測驗：<span id="ox-round-text"
+                                class="text-sky-600 text-2xl font-black mx-2">1</span> / 5</div>
+                        <div class="flex gap-2" id="ox-progress-dots">
+                        </div>
+                    </div>
+
+                    <div id="ox-display"
+                        class="p-10 rounded-3xl text-center mb-8 transition-colors duration-500 bg-sky-50 border-4 border-sky-200">
+                        <h3 id="ox-title" class="text-2xl md:text-3xl font-bold text-slate-800 leading-snug">載入題目中...
+                        </h3>
+                    </div>
+
+                    <div id="ox-tools-section" class="flex justify-center gap-6 md:gap-12">
+                        <button onclick="handleOxAction(true)"
+                            class="w-32 h-32 md:w-40 md:h-40 bg-white border-4 border-emerald-400 rounded-3xl hover:bg-emerald-50 hover:scale-105 transition-all shadow-lg flex flex-col items-center justify-center group">
+                            <span
+                                class="text-7xl md:text-8xl text-emerald-500 group-hover:text-emerald-600 font-black">⭕</span>
+                        </button>
+                        <button onclick="handleOxAction(false)"
+                            class="w-32 h-32 md:w-40 md:h-40 bg-white border-4 border-red-400 rounded-3xl hover:bg-red-50 hover:scale-105 transition-all shadow-lg flex flex-col items-center justify-center group">
+                            <span class="text-7xl md:text-8xl text-red-500 group-hover:text-red-600 font-black">❌</span>
+                        </button>
+                    </div>
+
+                    <div id="ox-feedback-box" class="hidden mt-8 p-6 rounded-2xl border-2 flex items-start gap-4">
+                        <div id="ox-feedback-icon" class="mt-1 flex-shrink-0"></div>
+                        <div class="w-full">
+                            <p id="ox-feedback-text" class="text-xl font-bold mb-2"></p>
+                            <p id="ox-feedback-detail" class="text-slate-700 font-medium text-lg leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <div id="ox-next-section" class="hidden text-center mt-8">
+                        <button id="ox-next-btn" onclick="nextOxRound()"
+                            class="px-10 py-4 bg-sky-600 text-white font-black text-xl rounded-full hover:bg-sky-700 hover:scale-105 transition-all shadow-md">
+                            下一題 ➡️
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div id="tab-content-escape-game" class="hidden w-full">
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                    <div
+                        class="flex justify-between items-center mb-6 bg-slate-100 p-4 rounded-2xl border border-slate-200">
+                        <div class="text-lg font-bold text-slate-700">生存挑戰：<span id="escape-round-text"
+                                class="text-slate-800 text-2xl font-black mx-2">1</span> / 5</div>
+                        <div class="flex gap-2" id="escape-progress-dots">
+                        </div>
+                    </div>
+
+                    <div id="escape-display"
+                        class="p-10 rounded-3xl text-center mb-8 transition-colors duration-500 bg-slate-100 border-4 border-slate-300">
+                        <div id="escape-icon" class="text-8xl mb-4 animate-bounce">🚨</div>
+                        <h3 id="escape-title" class="text-2xl font-bold text-slate-800 leading-snug">載入情境中...</h3>
+                    </div>
+
+                    <div id="escape-tools-section">
+                        <h3 class="text-xl font-bold text-center text-slate-700 mb-4">請選擇你的下一步行動：</h3>
+                        <div class="flex flex-col gap-4">
+                            <button id="escape-btn-0" onclick="handleEscapeAction(0)"
+                                class="p-5 bg-white border-2 border-slate-300 rounded-xl hover:bg-slate-50 hover:border-sky-500 hover:shadow-md transition-all text-left flex items-center group">
+                                <span class="text-2xl mr-4 group-hover:scale-125 transition-transform">👉</span><span
+                                    id="escape-opt-0" class="font-bold text-lg text-slate-700">選項 A</span>
+                            </button>
+                            <button id="escape-btn-1" onclick="handleEscapeAction(1)"
+                                class="p-5 bg-white border-2 border-slate-300 rounded-xl hover:bg-slate-50 hover:border-sky-500 hover:shadow-md transition-all text-left flex items-center group">
+                                <span class="text-2xl mr-4 group-hover:scale-125 transition-transform">👉</span><span
+                                    id="escape-opt-1" class="font-bold text-lg text-slate-700">選項 B</span>
+                            </button>
+                            <button id="escape-btn-2" onclick="handleEscapeAction(2)"
+                                class="p-5 bg-white border-2 border-slate-300 rounded-xl hover:bg-slate-50 hover:border-sky-500 hover:shadow-md transition-all text-left flex items-center group">
+                                <span class="text-2xl mr-4 group-hover:scale-125 transition-transform">👉</span><span
+                                    id="escape-opt-2" class="font-bold text-lg text-slate-700">選項 C</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="escape-feedback-box" class="hidden mt-8 p-6 rounded-2xl border-2 flex items-start gap-4">
+                        <div id="escape-feedback-icon" class="mt-1 flex-shrink-0"></div>
+                        <div class="w-full">
+                            <p id="escape-feedback-text" class="text-xl font-bold mb-2"></p>
+                            <p id="escape-feedback-detail" class="text-slate-700 font-medium text-lg leading-relaxed">
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="escape-next-section" class="hidden text-center mt-6">
+                        <button id="escape-next-btn" onclick="nextEscapeRound()"
+                            class="px-10 py-4 bg-slate-700 text-white font-black text-xl rounded-full hover:bg-slate-800 hover:scale-105 transition-all shadow-md">
+                            前往下一個情境 ➡️
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="view-level5" class="hidden min-h-screen bg-slate-100 p-6 flex flex-col items-center">
+        <div class="w-full max-w-6xl">
+            <button onclick="switchView('view-menu')"
+                class="flex items-center text-slate-600 font-bold mb-6 hover:text-slate-800 transition-colors">
+                <i data-lucide="arrow-left" class="mr-2"></i> 返回地圖
+            </button>
+
+            <header
+                class="flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b-4 border-slate-300 gap-4">
+                <h2 class="text-3xl font-extrabold text-slate-700 drop-shadow-sm flex items-center">
+                    <i data-lucide="shield" class="w-8 h-8 mr-3 text-slate-500"></i>防鏽兵工廠
+                </h2>
+                <div class="flex gap-2 md:gap-4 flex-wrap justify-end">
+                    <button onclick="switchRustTab('info')" id="tab-btn-rust-info"
+                        class="px-5 py-2 rounded-full font-bold bg-slate-600 text-white shadow-md transition-all text-sm md:text-base">防鏽指南</button>
+                    <button onclick="switchRustTab('metals')" id="tab-btn-rust-metals"
+                        class="px-5 py-2 rounded-full font-bold bg-white text-slate-500 border-2 border-slate-300 hover:bg-slate-200 transition-all text-sm md:text-base">誰會生鏽？</button>
+                    <button onclick="switchRustTab('game')" id="tab-btn-rust-game"
+                        class="px-5 py-2 rounded-full font-bold bg-white text-slate-500 border-2 border-slate-300 hover:bg-slate-200 transition-all text-sm md:text-base">時光機實戰</button>
+                </div>
+            </header>
+
+            <div id="tab-content-rust-info" class="w-full animate-fade-in-up">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white rounded-3xl shadow-lg border-4 border-orange-200 p-8 relative overflow-hidden">
+                        <i data-lucide="alert-triangle"
+                            class="absolute -right-6 -bottom-6 w-48 h-48 text-orange-50 opacity-50 rotate-12 pointer-events-none"></i>
+                        <h3 class="text-2xl font-extrabold text-orange-800 mb-4 flex items-center relative z-10">
+                            <i data-lucide="microscope" class="w-7 h-7 mr-2 text-orange-600"></i> 啟動生鏽的「雙煞」
+                        </h3>
+                        <p class="text-slate-700 font-medium mb-6 text-lg relative z-10 leading-relaxed">
+                            金屬（如鐵製品）長時間使用後，表面出現的棕色易碎物質就是「鐵鏽」。鐵要生鏽，必須<strong
+                                class="text-red-600 mx-1 text-xl">同時具備</strong>以下兩個條件，缺一不可！
+                        </p>
+                        <div
+                            class="flex justify-center items-center gap-4 relative z-10 bg-orange-50 p-6 rounded-2xl border-2 border-orange-100">
+                            <div class="text-center">
+                                <div
+                                    class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner border-4 border-blue-200">
+                                    <span class="text-4xl">💧</span>
+                                </div>
+                                <span class="font-bold text-blue-800 text-lg">水分</span>
+                            </div>
+                            <div class="text-3xl font-black text-slate-400">＋</div>
+                            <div class="text-center">
+                                <div
+                                    class="w-20 h-20 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner border-4 border-sky-200">
+                                    <span class="text-4xl">💨</span>
+                                </div>
+                                <span class="font-bold text-sky-800 text-lg">空氣 (氧氣)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-6">
+                        <div class="bg-white p-6 rounded-3xl shadow-lg border-4 border-red-200 flex-1">
+                            <h4 class="text-xl font-bold text-red-700 mb-3 flex items-center">
+                                <i data-lucide="thermometer-sun" class="w-6 h-6 mr-2 text-red-500"></i> 致命加速器
+                            </h4>
+                            <p class="text-slate-600 font-medium leading-relaxed">
+                                雖然有水和空氣就會生鏽，但如果在<strong class="text-red-600 mx-1">高溫環境</strong>，或是接觸到<strong
+                                    class="text-red-600 mx-1">酸雨、酸性水溶液（如食醋）</strong>，鐵生鏽的速度會變得超級快！
+                            </p>
+                        </div>
+                        <div
+                            class="bg-slate-700 p-6 rounded-3xl shadow-lg border-4 border-slate-800 flex-1 text-white relative overflow-hidden">
+                            <i data-lucide="flame"
+                                class="absolute -right-2 -bottom-2 w-32 h-32 text-slate-600 opacity-30 pointer-events-none"></i>
+                            <h4 class="text-xl font-bold text-amber-400 mb-3 flex items-center relative z-10">
+                                <i data-lucide="link" class="w-6 h-6 mr-2 text-amber-400"></i> 與燃燒的驚人共通點
+                            </h4>
+                            <p class="text-slate-200 font-medium leading-relaxed relative z-10">
+                                還記得前面的關卡嗎？鐵生鏽和燃燒其實是親戚！它們都會發生氧化反應，並且都會<strong
+                                    class="text-amber-300 mx-1 text-lg border-b-2 border-amber-300">消耗掉空氣中的「氧氣」</strong>。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-lg border-4 border-slate-200 p-8">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-extrabold text-slate-800 mb-2">🛡️ 防鏽武器庫大公開</h3>
+                        <p class="text-slate-600 font-medium text-lg">防鏽的核心原理就是：<strong
+                                class="text-blue-600 bg-blue-50 px-2 py-1 rounded">保持乾燥</strong> 或 <strong
+                                class="text-slate-700 bg-slate-100 px-2 py-1 rounded">隔絕水和空氣</strong>。</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div
+                            class="bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-400 transition-colors">
+                            <div class="text-4xl mb-3">🧽</div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">1. 保持乾燥</h4>
+                            <p class="text-slate-600 text-sm mb-3">盡量不接觸水分，切斷生鏽條件。</p>
+                            <p
+                                class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-2 rounded block leading-relaxed">
+                                💡 常見應用：花剪碰水後盡快擦乾、相機防潮箱、餅乾盒內的乾燥劑</p>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-400 transition-colors">
+                            <div class="text-4xl mb-3">🖌️</div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">2. 上漆</h4>
+                            <p class="text-slate-600 text-sm mb-3">在表面塗上油漆，完美隔絕水與空氣。</p>
+                            <p
+                                class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-2 rounded block leading-relaxed">
+                                💡 常見應用：戶外鐵窗、公園溜滑梯、跨海大橋</p>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-400 transition-colors">
+                            <div class="text-4xl mb-3">🛢️</div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">3. 塗油</h4>
+                            <p class="text-slate-600 text-sm mb-3">利用油水不互溶的特性隔絕，兼具潤滑效果。</p>
+                            <p
+                                class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-2 rounded block leading-relaxed">
+                                💡 常見應用：腳踏車鏈條、機械齒輪、發出怪聲的門軸</p>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-400 transition-colors">
+                            <div class="text-4xl mb-3">🧶</div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">4. 塑膠包覆</h4>
+                            <p class="text-slate-600 text-sm mb-3">外層緊密包覆一層不透水氣的塑膠材質。</p>
+                            <p
+                                class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-2 rounded block leading-relaxed">
+                                💡 常見應用：彩色曬衣架、迴紋針、電線外皮</p>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-400 transition-colors">
+                            <div class="text-4xl mb-3">⚡</div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">5. 電鍍</h4>
+                            <p class="text-slate-600 text-sm mb-3">利用電流，在表面鍍上一層不易生鏽的金屬（如鋅、錫）。</p>
+                            <p
+                                class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-2 rounded block leading-relaxed">
+                                💡 常見應用：水龍頭、玉米罐頭內部(鍍錫)、鐵皮屋頂(鍍鋅)</p>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 hover:border-slate-400 transition-colors">
+                            <div class="text-4xl mb-3">🔗</div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">6. 製成合金</h4>
+                            <p class="text-slate-600 text-sm mb-3">將多種物質熔合。如鐵+鉻+鎳變成不鏽鋼，鉻會形成保護膜。</p>
+                            <p
+                                class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-2 rounded block leading-relaxed">
+                                💡 常見應用：不鏽鋼餐具、保溫瓶內膽、醫療手術器材</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="tab-content-rust-metals" class="hidden w-full animate-fade-in-up">
+
+                <div
+                    class="bg-white rounded-3xl shadow-lg border-4 border-sky-200 p-8 mb-8 text-center relative overflow-hidden">
+                    <i data-lucide="help-circle"
+                        class="absolute -left-6 -top-6 w-32 h-32 text-sky-50 opacity-50 pointer-events-none"></i>
+                    <h3 class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-4 relative z-10">所有的金屬都會「生鏽」嗎？
+                    </h3>
+                    <p class="text-lg text-slate-600 font-medium relative z-10 leading-relaxed">
+                        在自然科學中，嚴格來說，只有<strong class="text-red-600 mx-1">「鐵」</strong>和氧氣、水分結合後產生的紅褐色物質，我們才會稱為「鐵鏽」。<br>
+                        其他的金屬接觸到空氣也會發生反應（這稱為<strong
+                            class="text-blue-600 mx-1 border-b-2 border-blue-400">氧化</strong>），但它們氧化的結果，卻和鐵完全不一樣喔！
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div
+                        class="bg-orange-50 p-6 rounded-3xl border-2 border-orange-200 hover:shadow-lg transition-shadow">
+                        <div class="text-5xl mb-4">🧲</div>
+                        <h4
+                            class="text-xl font-bold text-orange-900 mb-2 border-b-2 border-orange-300 pb-2 flex items-center">
+                            鐵 (Iron) - 致命的剝落
+                        </h4>
+                        <p class="text-slate-700 mb-3 font-medium">鐵生鏽後會變成紅褐色的「氧化鐵」。鐵鏽的結構<strong
+                                class="text-red-600 mx-1">非常疏鬆、容易剝落</strong>。</p>
+                        <p class="text-sm text-slate-600 bg-white p-3 rounded-xl border border-orange-100">
+                            🚨 <span class="font-bold">危機：</span>外層剝落後，內層的鐵會繼續接觸空氣生鏽，直到整塊鐵完全爛掉。所以鐵製品才這麼需要防鏽！
+                        </p>
+                    </div>
+
+                    <div
+                        class="bg-slate-100 p-6 rounded-3xl border-2 border-slate-300 hover:shadow-lg transition-shadow">
+                        <div class="text-5xl mb-4">🥫</div>
+                        <h4
+                            class="text-xl font-bold text-slate-800 mb-2 border-b-2 border-slate-400 pb-2 flex items-center">
+                            鋁 (Aluminum) - 自帶防護罩
+                        </h4>
+                        <p class="text-slate-700 mb-3 font-medium">鋁其實<strong
+                                class="text-blue-600 mx-1">比鐵更容易氧化</strong>！但它氧化後會形成一層薄薄的、透明且緻密的「氧化鋁」。</p>
+                        <p class="text-sm text-slate-600 bg-white p-3 rounded-xl border border-slate-200">
+                            🛡️ <span class="font-bold">超能力：</span>這層透明保護膜會緊緊貼在表面，阻止內部的鋁繼續接觸空氣。所以鋁門窗、鋁箔包都不容易壞掉！
+                        </p>
+                    </div>
+
+                    <div
+                        class="bg-emerald-50 p-6 rounded-3xl border-2 border-emerald-200 hover:shadow-lg transition-shadow">
+                        <div class="text-5xl mb-4">🗽</div>
+                        <h4
+                            class="text-xl font-bold text-emerald-900 mb-2 border-b-2 border-emerald-300 pb-2 flex items-center">
+                            銅 (Copper) - 穿上綠色外衣
+                        </h4>
+                        <p class="text-slate-700 mb-3 font-medium">銅在潮濕的空氣中慢慢氧化，會生成一層綠色的物質，稱為<strong
+                                class="text-emerald-700 mx-1">「銅綠」</strong>。</p>
+                        <p class="text-sm text-slate-600 bg-white p-3 rounded-xl border border-emerald-100">
+                            🗽 <span
+                                class="font-bold">生活實例：</span>美國的「自由女神像」本來是紅銅色的！因為外表產生了銅綠，才變成我們現在看到的薄荷綠色，這層銅綠同樣能保護內部的銅。
+                        </p>
+                    </div>
+
+                    <div
+                        class="bg-amber-50 p-6 rounded-3xl border-2 border-amber-200 hover:shadow-lg transition-shadow">
+                        <div class="text-5xl mb-4">✨</div>
+                        <h4
+                            class="text-xl font-bold text-amber-900 mb-2 border-b-2 border-amber-300 pb-2 flex items-center">
+                            不鏽鋼與黃金 - 抗氧化王者
+                        </h4>
+                        <p class="text-slate-700 mb-3 font-medium"><strong
+                                class="text-slate-800">不鏽鋼：</strong>在鐵中加入「鉻」，鉻會先氧化成保護膜，讓鐵無法生鏽。<br><strong
+                                class="text-amber-600">黃金/白金：</strong>化學性質極度穩定，幾乎不與氧氣反應。</p>
+                        <p class="text-sm text-slate-600 bg-white p-3 rounded-xl border border-amber-100">
+                            💍 <span class="font-bold">生活實例：</span>保溫瓶內膽、阿嬤的金戒指。即使放了幾十年，依然可以保持閃閃發亮！
+                        </p>
+                    </div>
+
+                    <div
+                        class="bg-neutral-50 p-6 rounded-3xl border-2 border-neutral-200 hover:shadow-lg transition-shadow">
+                        <div class="text-5xl mb-4">🥈</div>
+                        <h4
+                            class="text-xl font-bold text-neutral-900 mb-2 border-b-2 border-neutral-300 pb-2 flex items-center">
+                            銀 (Silver) - 變黑的華麗
+                        </h4>
+                        <p class="text-slate-700 mb-3 font-medium">銀是化學性質穩定的「貴金屬」，所以它並不會像鐵一樣「生鏽」爛掉。</p>
+                        <p class="text-sm text-slate-600 bg-white p-3 rounded-xl border border-neutral-100">
+                            ✨ <span
+                                class="font-bold">硫化現象：</span>但銀接觸到空氣中的微量硫化物時，會發生「硫化反應」生成黑色的硫化銀。這就是銀飾戴久了會變黑的原因，通常可以用拭銀布擦亮回復光澤！
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50 p-6 rounded-3xl border-2 border-rose-200 hover:shadow-lg transition-shadow">
+                        <div class="text-5xl mb-4">🛠️⚠️</div>
+                        <h4
+                            class="text-xl font-bold text-rose-900 mb-2 border-b-2 border-rose-300 pb-2 flex items-center">
+                            為什麼不鏽鋼有時也會「生鏽」？
+                        </h4>
+                        <p class="text-slate-700 mb-3 font-medium">不鏽鋼不是絕對不會生鏽，而是因為含有「鉻」，能在表面形成一層極薄且緻密的<strong
+                                class="text-blue-600 mx-1">「保護膜」</strong>，阻絕空氣。</p>
+                        <p
+                            class="text-sm text-slate-600 bg-white p-3 rounded-xl border border-rose-100 leading-relaxed">
+                            🚧 <span class="font-bold">破壞原因：</span><br>
+                            1. 物理磨損：刮痕太深會破壞保護膜。<br>
+                            2. 強酸強鹼：強效清潔劑會腐蝕保護膜。<br>
+                            3. 劣質材質：含鉻量太低（如 200 系列不鏽鋼），在潮濕環境就容易生鏽。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-content-rust-game" class="hidden w-full">
+                <div class="bg-white rounded-3xl shadow-lg p-6 md:p-8 border-4 border-slate-200">
+
+                    <div
+                        class="flex justify-between items-center mb-6 bg-slate-100 p-4 rounded-2xl border border-slate-200 shadow-inner">
+                        <div class="text-lg font-bold text-slate-700">
+                            維修進度：<span id="rust-round-text" class="text-sky-600 text-2xl font-black mx-2">1</span> / 5
+                        </div>
+                        <div class="flex gap-2" id="rust-progress-dots">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-6 items-stretch mb-6">
+
+                        <div id="rust-display"
+                            class="flex-[3] p-8 rounded-3xl text-center transition-colors duration-500 bg-slate-100 border-4 border-slate-300 relative overflow-hidden min-h-[280px] flex flex-col justify-center items-center">
+
+                            <div id="time-machine-overlay"
+                                class="hidden absolute inset-0 bg-white/95 z-20 flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-500 opacity-0">
+                                <div class="text-6xl animate-spin-slow mb-4 drop-shadow-md">⏳</div>
+                                <h3 class="text-2xl md:text-3xl font-black text-sky-600 animate-pulse tracking-widest">
+                                    時光加速中<br><span class="text-lg md:text-xl text-sky-500 mt-2 block">... 半年後 ...</span>
+                                </h3>
+                            </div>
+
+                            <div id="rust-icon"
+                                class="text-7xl md:text-8xl mb-4 relative z-10 drop-shadow-md transition-transform duration-300">
+                                🚲</div>
+                            <h3 id="rust-title"
+                                class="text-xl md:text-2xl font-bold text-slate-800 leading-snug relative z-10 px-2">
+                                載入待修物品中...</h3>
+                        </div>
+
+                        <div id="rust-tools-section" class="flex-[2] flex flex-col justify-center relative">
+
+                            <div id="rust-tools-container" class="w-full">
+                                <h3
+                                    class="text-lg font-bold text-center text-slate-700 mb-4 flex items-center justify-center">
+                                    <i data-lucide="wrench" class="w-5 h-5 mr-2 text-slate-500"></i> 選擇防鏽工具：
+                                </h3>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="handleRustAction('dry')"
+                                        class="p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-blue-50 hover:border-blue-400 hover:shadow-md transition-all flex flex-col items-center group active:scale-95">
+                                        <span
+                                            class="text-4xl mb-2 group-hover:scale-110 transition-transform drop-shadow-sm">🧽</span>
+                                        <span class="font-bold text-slate-700">保持乾燥</span>
+                                    </button>
+                                    <button onclick="handleRustAction('paint')"
+                                        class="p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-red-50 hover:border-red-400 hover:shadow-md transition-all flex flex-col items-center group active:scale-95">
+                                        <span
+                                            class="text-4xl mb-2 group-hover:scale-110 transition-transform drop-shadow-sm">🖌️</span>
+                                        <span class="font-bold text-slate-700">上漆</span>
+                                    </button>
+                                    <button onclick="handleRustAction('oil')"
+                                        class="p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-amber-50 hover:border-amber-400 hover:shadow-md transition-all flex flex-col items-center group active:scale-95">
+                                        <span
+                                            class="text-4xl mb-2 group-hover:scale-110 transition-transform drop-shadow-sm">🛢️</span>
+                                        <span class="font-bold text-slate-700">塗油</span>
+                                    </button>
+                                    <button onclick="handleRustAction('plate')"
+                                        class="p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-slate-100 hover:border-slate-500 hover:shadow-md transition-all flex flex-col items-center group active:scale-95">
+                                        <span
+                                            class="text-4xl mb-2 group-hover:scale-110 transition-transform drop-shadow-sm">⚡</span>
+                                        <span class="font-bold text-slate-700">電鍍</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="rust-final-result" class="hidden flex-col items-center text-center w-full">
+                            </div>
+
+                            <div id="rust-next-section" class="hidden text-center mt-6 animate-fade-in-up w-full">
+                                <button id="rust-next-btn" onclick="nextRustRound()"
+                                    class="px-6 py-4 bg-sky-600 text-white font-black text-lg rounded-xl hover:bg-sky-700 hover:scale-105 transition-all shadow-md w-full">
+                                    前往下一個委託 ➡️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="rust-feedback-box"
+                        class="hidden p-6 rounded-2xl border-2 flex items-start gap-4 transition-all w-full">
+                        <div id="rust-feedback-icon" class="mt-1 flex-shrink-0"></div>
+                        <div class="w-full">
+                            <p id="rust-feedback-text" class="text-xl md:text-2xl font-bold mb-2"></p>
+                            <p id="rust-feedback-detail"
+                                class="text-slate-700 font-medium text-base md:text-lg leading-relaxed"></p>
+                        </div>
+                    </div>
+                    <script src="burnscript.js"></script>
+</body>
+
+</html>

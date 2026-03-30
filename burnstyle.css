@@ -1,0 +1,250 @@
+/* 自訂動畫效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ========================================= */
+/* 全站防護：徹底禁止文字選取與圖片拖曳 */
+/* ========================================= */
+* {
+  -webkit-user-select: none; /* 支援 Safari / Chrome */
+  -moz-user-select: none;    /* 支援 Firefox */
+  -ms-user-select: none;     /* 支援 Edge */
+  user-select: none;         /* 標準語法 */
+  -webkit-user-drag: none;   /* 防止背景圖或 icon 被拖曳產生殘影 */
+}
+
+/* ⚠️ 豁免條款：如果有輸入框，必須允許它們可以被選取打字 */
+input, textarea {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* 確保隱藏元素時完全消失 */
+.hidden {
+  display: none !important;
+}
+
+/* 延遲動畫，模擬 React 裡的 delay */
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+/* 緩慢旋轉 */
+.animate-spin-slow {
+  animation: spin 10s linear infinite;
+}
+
+/* 氣體因子的基本樣式 */
+.particle-bubble {
+  position: absolute; /* 必須是 absolute，方便 JS 控制位置 */
+  border-radius: 50%; /* 核心修改：確保必定是圓形 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: inset 0 -5px 8px rgba(0,0,0,0.2), 0 5px 10px rgba(0, 0, 0, 0.15); /* 增加可愛泡泡質感 */
+  user-select: none;
+  /* 保留：點擊縮放效果與破裂動畫定義 */
+  transition: transform 0.1s;
+  will-change: transform, left, top; /* 優化效能 */
+
+}
+
+.particle-bubble:hover {
+  transform: scale(1.1) !important;
+}
+
+/* 泡泡破裂動畫 (點擊時加入) - 保持不變 */
+@keyframes pop {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.8; }
+  100% { transform: scale(0); opacity: 0; }
+}
+.bubble-pop {
+  animation: pop 0.3s ease-out forwards;
+  pointer-events: none;
+}
+/* Swirling fog animation */
+@keyframes swirlingFog {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(-5px, 5px) scale(1.02);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(5px, -5px) scale(0.98);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translate(-5px, -5px) scale(1.02);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+}
+
+.lav-air-fog {
+  background: white;
+  filter: blur(8px);
+  border-radius: 50%; /* Make it rounded and diffused */
+  animation: swirlingFog 10s infinite linear;
+  opacity: 0; /* Default hidden, but we will make it visible via JS */
+  pointer-events: none; /* Make it unclickable */
+}
+
+/* Ensure backdrop-blur works as expected in Tailwind */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+/* ========================================= */
+/* 水銀液體與金屬質感特效                      */
+/* ========================================= */
+
+/* 修改後的 CSS */
+.mercury-liquid {
+    background: linear-gradient(180deg, rgba(226, 232, 240, 0.85) 0%, rgba(148, 163, 184, 0.95) 20%, rgba(71, 85, 105, 0.95) 100%);
+    box-shadow: inset 0px 4px 6px rgba(255, 255, 255, 0.7), inset 0px -4px 10px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(1px);
+    /* 🗑️ 刪除了 border-radius，形狀交由 JS 生成的外層遮罩決定 */
+}
+/* 氣體往上飄浮的動畫 */
+@keyframes floatUpAndFade {
+  0% { transform: translateY(20px) scale(0.8); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-100px) scale(1.3); opacity: 0; }
+}
+
+.animate-float-up {
+  animation: floatUpAndFade 2s infinite ease-out;
+  position: absolute; /* 讓泡泡可以互相重疊 */
+}
+/* ========================================= */
+/* 線香檢驗動畫設定                           */
+/* ========================================= */
+
+/* 1. 線香插入廣口瓶的動作 (往下移再收回) */
+@keyframes dipIncense {
+  0% { transform: translateY(-120px); opacity: 0; }
+  15% { transform: translateY(-50px); opacity: 1; }
+  30%, 75% { transform: translateY(30px); opacity: 1; } /* 停留在廣口瓶內 */
+  100% { transform: translateY(-120px); opacity: 0; }
+}
+.animate-dip {
+  animation: dipIncense 3.5s ease-in-out forwards;
+}
+
+/* 2. 火焰劇烈燃燒 (遇到氧氣) */
+@keyframes flameGrow {
+  0%, 30% { transform: scale(1); filter: brightness(1); }
+  45%, 70% { transform: scale(2.5); filter: brightness(1.5) drop-shadow(0 0 15px rgba(255, 69, 0, 0.8)); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.animate-flame-grow {
+  animation: flameGrow 3.5s ease-in-out forwards;
+  transform-origin: bottom center;
+}
+
+/* 3. 火焰熄滅 (遇到二氧化碳或無氣體) */
+@keyframes flameDie {
+  0%, 30% { transform: scale(1); opacity: 1; }
+  40%, 100% { transform: scale(0); opacity: 0; } /* 迅速縮小並消失 */
+}
+.animate-flame-die {
+  animation: flameDie 3.5s ease-in-out forwards;
+  transform-origin: bottom center;
+}
+/* ========================================= */
+/* 石灰水檢驗動畫升級                         */
+/* ========================================= */
+
+/* 1. 升級版：試管移入 -> 大角度倒入 -> 搖晃 -> 移出的動作 */
+@keyframes pourAndShakeLimewater {
+  0% { transform: translate(80px, -50px) rotate(45deg); opacity: 0; }
+  15% { transform: translate(20px, -20px) rotate(0deg); opacity: 1; } /* 抵達廣口瓶上方 */
+  25% { transform: translate(10px, 10px) rotate(-60deg); } /* ✅ 顯著傾斜，倒入液體 ✅ */
+  
+  /* 35% 到 80% 間：在傾斜狀態下進行小幅度搖晃/振盪 */
+  35%, 55%, 75% { transform: translate(10px, 10px) rotate(-50deg); } 
+  45%, 65%, 80% { transform: translate(10px, 10px) rotate(-70deg); }
+
+  /* 結束移出 */
+  100% { transform: translate(80px, -50px) rotate(45deg); opacity: 0; }
+}
+
+.animate-pour {
+  /* 🌟 將長度增加到 4s 以容納更多動作 */
+  animation: pourAndShakeLimewater 4s ease-in-out forwards;
+}
+
+/* 2. 新增：讓廣口瓶泛起白色霧氣的樣式 */
+.jar-cloudy-fog {
+  opacity: 0.9 !important; /* mostly white */
+  filter: blur(2px); /* 輕微模糊，模擬霧氣感 */
+}
+/* ================= 第四關：拖曳排序專用樣式 ================= */
+
+/* 🌟 加入這段：發給排序卡片豁免權，允許它們被拖曳 (覆蓋全站防護) */
+.sortable-item {
+    -webkit-user-drag: element !important;
+}
+/* 當按鈕處於鎖定狀態時 */
+.tab-locked {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+    pointer-events: none; /* 徹底禁止點擊事件 */
+}
+
+/* 正在被拖曳的物品樣式 */
+.sortable-item.dragging {
+    opacity: 0.4;
+    scale: 1.05;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    border-style: dashed;
+    border-color: #ef4444; /* red-500 */
+}
+
+/* 當有東西拖曳過來的容器樣式 (可以在 JS 中動態加入，此處備用) */
+.drag-over-container {
+    background-color: #fef2f2; /* red-50 */
+    border-color: #fca5a5; /* red-300 */
+}
+
+/* 排序成功後的卡片樣式變化 */
+.sort-success-card {
+    border-color: #10b981 !important; /* emerald-500 */
+    background-color: #ecfdf5 !important; /* emerald-50 */
+    color: #065f46 !important; /* emerald-800 */
+    cursor: default !important;
+}
+
+.sort-success-card p, .sort-success-card strong {
+    color: #065f46 !important;
+}
+
+.sort-success-card .text-white {
+    color: #10b981 !important; /* 把白字變綠字 */
+}
