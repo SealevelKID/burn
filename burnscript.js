@@ -1831,51 +1831,83 @@ function setupExtinguisherSortable() {
   const container = document.getElementById('extinguisher-sortable-container');
   if (!container) return;
 
-  // 🌟 新增：取得所有卡片並利用現有的 shuffleArray 進行洗牌
+  // 取得所有卡片並利用現有的 shuffleArray 進行洗牌
   const cardsArray = Array.from(container.querySelectorAll('.sortable-item'));
   shuffleArray(cardsArray);
   cardsArray.forEach(card => container.appendChild(card)); // 將洗牌後的順序重新塞回畫面中
 
-  // 重新抓取洗牌後的卡片節點，綁定拖曳事件
+  // 重新抓取洗牌後的卡片節點，綁定事件
   const sortables = container.querySelectorAll('.sortable-item');
   let draggedItem = null;
+  let clickedItem = null; // 🌟 新增：用於記錄目前被點擊選取的卡片
+
+  // 輔助函數：清除點選狀態
+  function clearSelection() {
+    if (clickedItem) {
+      clickedItem.classList.remove('ring-4', 'ring-sky-400', 'scale-105', 'shadow-xl', 'z-10');
+      clickedItem = null;
+    }
+  }
+
+  // 輔助函數：DOM 元素互換
+  function swapElements(el1, el2) {
+    const temp = document.createElement('div');
+    el1.parentNode.insertBefore(temp, el1);
+    el2.parentNode.insertBefore(el1, el2);
+    temp.parentNode.insertBefore(el2, temp);
+    temp.parentNode.removeChild(temp);
+  }
 
   sortables.forEach(sortable => {
-    // 1. 開始拖曳
+    // === 原有：拖曳邏輯 (保留給電腦版) ===
     sortable.addEventListener('dragstart', function () {
+      if (this.classList.contains('sort-success-card')) return; // 過關後禁止
       draggedItem = this;
-      // 延遲加上 dragging class，確保原生拖曳影像是正常的
+      clearSelection(); // 開始拖曳時，清除任何點擊選取狀態
       setTimeout(() => this.classList.add('dragging'), 0);
     });
 
-    // 2. 結束拖曳
     sortable.addEventListener('dragend', function () {
       this.classList.remove('dragging');
       draggedItem = null;
-      // 每次放開滑鼠就檢查一次順序
-      checkExtinguisherOrder();
+      checkExtinguisherOrder(); // 檢查順序
     });
 
-    // 3. 拖曳經過其他卡片上方時
     sortable.addEventListener('dragover', function (e) {
-      e.preventDefault(); // 必須 preventDefault 才能允許放置
+      e.preventDefault();
     });
 
-    // 4. 拖曳進入其他卡片範圍時 (觸發位置交換)
     sortable.addEventListener('dragenter', function (e) {
       e.preventDefault();
-      // 如果拖曳的不是自己，就進行位置對調
       if (draggedItem !== this && draggedItem !== null) {
         let allItems = [...container.querySelectorAll('.sortable-item')];
         let draggedIndex = allItems.indexOf(draggedItem);
         let targetIndex = allItems.indexOf(this);
 
-        // 判斷往前移還是往後移，將元素安插進 DOM
         if (draggedIndex < targetIndex) {
           this.parentNode.insertBefore(draggedItem, this.nextSibling);
         } else {
           this.parentNode.insertBefore(draggedItem, this);
         }
+      }
+    });
+
+    // === 🌟 新增：點擊互換邏輯 (支援平板與手機) ===
+    sortable.addEventListener('click', function () {
+      if (this.classList.contains('sort-success-card')) return; // 過關後禁止點擊
+
+      if (!clickedItem) {
+        // 情況 1：還沒選取任何卡片 -> 選取自己，並加上亮醒目的藍色外框與放大效果
+        clickedItem = this;
+        this.classList.add('ring-4', 'ring-sky-400', 'scale-105', 'shadow-xl', 'z-10');
+      } else if (clickedItem === this) {
+        // 情況 2：再次點擊自己 -> 取消選取
+        clearSelection();
+      } else {
+        // 情況 3：已經選了一張，現在點擊第二張 -> 互換位置！
+        swapElements(clickedItem, this);
+        clearSelection(); // 互換後清除選取狀態
+        checkExtinguisherOrder(); // 檢查順序是否正確
       }
     });
   });
